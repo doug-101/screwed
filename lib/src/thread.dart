@@ -1,23 +1,34 @@
-import 'package:screwed/data/threads_english.dart' as english_data;
-// import 'package:screwed/data/threads_metric.dart' as metric_data;
+abstract class Thread {
+  final double majorDia;
+  final bool isCommon;
 
-List<Thread> loadThreadData() {
-  List<Thread> threads = [];
-  for (var item in english_data.data) {
-    threads.add(Thread(item));
-  }
-  return threads;
+  Thread(Map<String, dynamic> data)
+      : majorDia = data['major_dia'],
+        isCommon = data['common'];
 }
 
-class Thread {
-  String diaName, series;
-  double majorDia;
-  num thdsPerInch;
 
-  Thread(Map<String, dynamic> data) {
-    diaName = data['dia_name'];
-    majorDia = data['major_dia'];
-    thdsPerInch = data['thds_per_inch'];
-    series = data['series'];
-  }
+class EnglishThread extends Thread {
+  final String diaName, series, tapName, closeClear, freeClear;
+  final num thdsPerInch;
+
+  EnglishThread(Map<String, dynamic> data)
+      : diaName = data['dia_name'],
+        thdsPerInch = data['thds_per_in'],
+        series = data['series'],
+        tapName = data['tap_drill'],
+        closeClear = data['close_clear'],
+        freeClear = data['free_clear'],
+        super(data);
+}
+
+
+class MetricThread extends Thread {
+  final double pitch, tapDia, clearDia;
+
+  MetricThread(Map<String, dynamic> data)
+      : pitch = data['pitch'],
+        tapDia = data['tap_drill'],
+        clearDia = data['clear_hole'],
+        super(data);
 }
