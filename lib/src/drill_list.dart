@@ -11,4 +11,18 @@ class DrillData {
     var data = isMetric ? metric_data.data : english_data.data;
     drills = data.map((item) => Drill(item, isMetric)).toList();
   }
+
+  DrillData approxMatch(double dia, int deltaCount) {
+    var startPos = drills.indexWhere((drill) => dia <= drill.diameter);
+    var endPos = drills.lastIndexWhere((drill) => dia >= drill.diameter);
+    if (startPos < 0) startPos = endPos + 1;  // Covers when dia > all drills.
+    startPos -= deltaCount;
+    endPos += deltaCount;
+    if (startPos < 0) startPos = 0;
+    if (endPos >= drills.length) endPos = drills.length - 1;
+    if (startPos <= endPos) {
+      return DrillData(drills.sublist(startPos, endPos + 1));
+    }
+    return DrillData([]);
+  }
 }
