@@ -11,20 +11,23 @@ int drillCount() {
 }
 
 String textSearch(String text) {
-  var metric = false;
+  var isMetric = false;
   if (text.endsWith('"')) {
     text = text.substring(0, text.length - 1).trim();
   } else if (text.endsWith('in')) {
     text = text.substring(0, text.length - 2).trim();
   } else if (text.endsWith('mm')) {
     text = text.substring(0, text.length - 2).trim();
-    metric = true;
+    isMetric = true;
   }
-  var dia = double.tryParse(text);
-  if (dia != null && dia > 0) {
-    var matchedDrills = englishDrills.approxMatch(dia, 2);
-    if (matchedDrills.drills.isNotEmpty) {
-      return matchedDrills.drills.join('<br>\n');
+  var diameter = double.tryParse(text);
+  if (diameter != null && diameter > 0) {
+    var inchDia = isMetric ? diameter / 25.4 : diameter;
+    var matchedDrills = englishDrills.approxMatch(inchDia, 4);
+    matchedDrills.combine(metricDrills.approxMatch(inchDia, 4));
+    if (matchedDrills.isNotEmpty) {
+      matchedDrills = matchedDrills.approxMatch(inchDia, 4);
+      return matchedDrills.toTable(isMetric, inchDia);
     }
   }
   return 'Nothing found';

@@ -12,10 +12,12 @@ class DrillData {
     drills = data.map((item) => Drill(item, isMetric)).toList();
   }
 
-  DrillData approxMatch(double dia, int deltaCount) {
-    var startPos = drills.indexWhere((drill) => dia <= drill.diameter);
-    var endPos = drills.lastIndexWhere((drill) => dia >= drill.diameter);
-    if (startPos < 0) startPos = endPos + 1;  // Covers when dia > all drills.
+  bool get isNotEmpty => drills.isNotEmpty;
+
+  DrillData approxMatch(double inchDia, int deltaCount) {
+    var startPos = drills.indexWhere((drill) => inchDia <= drill.inchDia);
+    var endPos = drills.lastIndexWhere((drill) => inchDia >= drill.inchDia);
+    if (startPos < 0) startPos = endPos + 1;  // if inchDia > all drills.
     startPos -= deltaCount;
     endPos += deltaCount;
     if (startPos < 0) startPos = 0;
@@ -24,5 +26,20 @@ class DrillData {
       return DrillData(drills.sublist(startPos, endPos + 1));
     }
     return DrillData([]);
+  }
+
+  void combine(DrillData other) {
+    drills.addAll(other.drills);
+    drills.sort();
+  }
+
+  String toString() {
+    return drills.join('<br>\n');
+  }
+
+  String toTable(bool metricFirst, double boldInchDia) {
+    var entries = drills.map((drill) =>
+                             drill.toTable(metricFirst, boldInchDia));
+    return '<table><tr>${entries.join('</tr>\n<tr>')}</tr></table>';
   }
 }
