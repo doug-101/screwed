@@ -30,7 +30,7 @@ class Drill implements Comparable<Drill> {
                       '[${mmDia.toStringAsFixed(3)} mm]']);
     }
     if (boldInchDia == inchDia) {
-      entries = entries.map((entry) => '<b>$entry</b>');
+      entries = entries.map((entry) => '<b>$entry</b>').toList();
     }
     return '<td>${entries.join('</td><td>')}</td>';
   }

@@ -22,13 +22,19 @@ String textSearch(String text) {
   }
   var diameter = double.tryParse(text);
   if (diameter != null && diameter > 0) {
+    var results = '';
     var inchDia = isMetric ? diameter / 25.4 : diameter;
     var matchedDrills = englishDrills.approxMatch(inchDia, 4);
     matchedDrills.combine(metricDrills.approxMatch(inchDia, 4));
     if (matchedDrills.isNotEmpty) {
       matchedDrills = matchedDrills.approxMatch(inchDia, 4);
-      return matchedDrills.toTable(isMetric, inchDia);
+      results = '<h1>Drills</h1>\n';
+      results += matchedDrills.toTable(isMetric, inchDia);
     }
+    var matchedThreads = englishThreads.approxMatch(diameter, true);
+    results += '<h1>Threads</h1>\n';
+    results += matchedThreads.toTable(diameter);
+    return results;
   }
   return 'Nothing found';
 }

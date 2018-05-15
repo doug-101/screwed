@@ -5,6 +5,12 @@ abstract class Thread {
   Thread(Map<String, dynamic> data)
       : majorDia = data['major_dia'],
         isCommon = data['common'];
+
+  double get inchMajorDia => majorDia;
+
+  double get mmMajorDia => majorDia;
+
+  String toTable(double boldMajorDia);
 }
 
 
@@ -20,6 +26,20 @@ class EnglishThread extends Thread {
         closeClear = data['close_clear'],
         freeClear = data['free_clear'],
         super(data);
+
+  @override
+  double get mmMajorDia => majorDia * 25.4;
+
+  @override
+  String toTable(double boldMajorDia) {
+    var entries = ['$diaName - $thdsPerInch', series,
+                   majorDia.toStringAsFixed(4),
+                   '[${mmMajorDia.toStringAsFixed(3)} mm]'];
+    if (boldMajorDia == majorDia) {
+      entries = entries.map((entry) => '<b>$entry</b>').toList();
+    }
+    return '<td>${entries.join('</td><td>')}</td>';
+  }
 }
 
 
@@ -31,4 +51,17 @@ class MetricThread extends Thread {
         tapDia = data['tap_drill'],
         clearDia = data['clear_hole'],
         super(data);
+
+  @override
+  double get inchMajorDia => majorDia / 25.4;
+
+  @override
+  String toTable(double boldMajorDia) {
+    var entries = ['M$majorDia x $pitch', isCommon ? 'common' : 'uncommon',
+                   '[${inchMajorDia.toStringAsFixed(4)} in]'];
+    if (boldMajorDia == majorDia) {
+      entries = entries.map((entry) => '<b>$entry</b>').toList();
+    }
+    return '<td>${entries.join('</td><td>')}</td>';
+  }
 }
