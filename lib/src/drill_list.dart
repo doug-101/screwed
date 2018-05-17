@@ -17,15 +17,17 @@ class DrillData {
   DrillData approxMatch(double inchDia, int deltaCount) {
     var startPos = drills.indexWhere((drill) => inchDia <= drill.inchDia);
     var endPos = drills.lastIndexWhere((drill) => inchDia >= drill.inchDia);
-    if (startPos < 0) startPos = endPos + 1;  // if inchDia > all drills.
-    startPos -= deltaCount;
-    endPos += deltaCount;
+    if (startPos < 0) {
+      startPos = endPos - deltaCount;
+    } else if (endPos < 0) {
+      endPos = deltaCount;
+    } else {
+      startPos -= deltaCount;
+      endPos += deltaCount;
+    }
     if (startPos < 0) startPos = 0;
     if (endPos >= drills.length) endPos = drills.length - 1;
-    if (startPos <= endPos) {
-      return DrillData(drills.sublist(startPos, endPos + 1));
-    }
-    return DrillData([]);
+    return DrillData(drills.sublist(startPos, endPos + 1));
   }
 
   void combine(DrillData other) {

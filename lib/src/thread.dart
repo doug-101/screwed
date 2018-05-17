@@ -28,7 +28,7 @@ class EnglishThread extends Thread {
         super(data);
 
   @override
-  double get mmMajorDia => majorDia * 25.4;
+  double get mmMajorDia => (majorDia * 25400).round() / 1000;
 
   @override
   String toTable(double boldMajorDia) {
@@ -53,7 +53,7 @@ class MetricThread extends Thread {
         super(data);
 
   @override
-  double get inchMajorDia => majorDia / 25.4;
+  double get inchMajorDia => (majorDia / 0.00254).round() / 10000;
 
   @override
   String toTable(double boldMajorDia) {

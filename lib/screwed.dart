@@ -23,17 +23,27 @@ String textSearch(String text) {
   var diameter = double.tryParse(text);
   if (diameter != null && diameter > 0) {
     var results = '';
-    var inchDia = isMetric ? diameter / 25.4 : diameter;
+    var inchDia = isMetric ? (diameter / 0.00254).round() / 10000 : diameter;
     var matchedDrills = englishDrills.approxMatch(inchDia, 4);
     matchedDrills.combine(metricDrills.approxMatch(inchDia, 4));
-    if (matchedDrills.isNotEmpty) {
-      matchedDrills = matchedDrills.approxMatch(inchDia, 4);
-      results = '<h1>Drills</h1>\n';
-      results += matchedDrills.toTable(isMetric, inchDia);
+    matchedDrills = matchedDrills.approxMatch(inchDia, 4);
+    results = '<h1>Drills</h1>\n';
+    results += matchedDrills.toTable(isMetric, inchDia);
+
+    var matchedThreads = englishThreads.approxMatch(inchDia, true);
+    var englishResults = '\n<h1>Unified Threads</h1>\n';
+    englishResults += matchedThreads.toTable(inchDia);
+
+    var mmDia = isMetric ? diameter : (diameter * 2540).round() / 100;
+    matchedThreads = metricThreads.approxMatch(mmDia, true);
+    var metricResults = '\n<h1>Metric Threads</h1>\n';
+    metricResults += matchedThreads.toTable(mmDia);
+
+    if (isMetric) {
+      results += metricResults + englishResults;
+    } else {
+      results += englishResults + metricResults;
     }
-    var matchedThreads = englishThreads.approxMatch(diameter, true);
-    results += '<h1>Threads</h1>\n';
-    results += matchedThreads.toTable(diameter);
     return results;
   }
   return 'Nothing found';

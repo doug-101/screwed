@@ -7,9 +7,10 @@ class Drill implements Comparable<Drill> {
       : diaName = data['name'],
         diameter = data['diameter'];
 
-  double get inchDia => isMetric ? diameter / 25.4 : diameter;
+  double get inchDia => isMetric ? (diameter / 0.00254).round() / 10000 :
+                        diameter;
 
-  double get mmDia => isMetric ? diameter : diameter * 25.4;
+  double get mmDia => isMetric ? diameter : (diameter * 25400).round() / 1000;
 
   String toString() {
     if (isMetric) {
