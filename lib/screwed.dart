@@ -48,3 +48,13 @@ String textSearch(String text) {
   }
   return 'Nothing found';
 }
+
+String threadDetails(String name) {
+  String details;
+  if (name.startsWith('M')) {
+    details = metricThreads.nameMatch(name).details();
+  } else {
+    details = englishThreads.nameMatch(name).details();
+  }
+  return details;
+}

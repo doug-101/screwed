@@ -44,6 +44,28 @@ class ThreadData {
     return ThreadData(threads.sublist(startPos, endPos + 1), isMetric);
   }
 
+  Thread nameMatch(String name) {
+    if (isMetric) {
+      var data = name.substring(1).split('x');
+      var dia = double.parse(data[0].trim());
+      var pitch = double.parse(data[1].trim());
+      for (MetricThread thread in threads) {
+        if (thread.majorDia == dia && thread.pitch == pitch) {
+          return thread;
+        }
+      }
+    } else {
+      var data = name.split(' - ');
+      var diaName = data[0].trim();
+      var thdsPerInch = double.parse(data[1].trim());
+      for (EnglishThread thread in threads) {
+        if (thread.diaName == diaName && thread.thdsPerInch == thdsPerInch) {
+          return thread;
+        }
+      }
+    }
+  }
+
   String toTable(double boldMajorDia) {
     var entries = threads.map((thread) => thread.toTable(boldMajorDia));
     return '<table><tr>${entries.join('</tr>\n<tr>')}</tr></table>';

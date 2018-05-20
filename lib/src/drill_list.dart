@@ -30,6 +30,13 @@ class DrillData {
     return DrillData(drills.sublist(startPos, endPos + 1));
   }
 
+  Drill nameMatch(String name) {
+    for (Drill drill in drills) {
+      if (name == drill.diaName) return drill;
+    }
+    return null;
+  }
+
   void combine(DrillData other) {
     drills.addAll(other.drills);
     drills.sort();

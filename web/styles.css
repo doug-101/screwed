@@ -22,3 +22,8 @@ td {
   padding: 0.3rem 1rem;
   text-align: center;
 }
+
+.clickable {
+  cursor: pointer;
+  color: Navy;
+}
