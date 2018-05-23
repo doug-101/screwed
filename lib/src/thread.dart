@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'package:screwed/screwed.dart' as drillRef;
 
 abstract class Thread {
   final double majorDia;
+  double pitch, extMinorDia;
   final bool isCommon;
 
   Thread(Map<String, dynamic> data)
@@ -11,6 +13,12 @@ abstract class Thread {
   double get inchMajorDia => majorDia;
 
   double get mmMajorDia => majorDia;
+
+  double get threadHeight => sqrt(3) * pitch / 2;
+
+  double get pitchDiameter => majorDia - threadHeight * 3 / 4;
+
+  double get intMinorDia => majorDia - threadHeight * 5 / 4;
 
   String toTable(double boldMajorDia);
 
@@ -32,7 +40,13 @@ class EnglishThread extends Thread {
         super(data);
 
   @override
+  double get pitch => 1 / thdsPerInch;
+
+  @override
   double get mmMajorDia => (majorDia * 25400).round() / 1000;
+
+  @override
+  double get extMinorDia => intMinorDia - threadHeight / 8;
 
   @override
   String toTable(double boldMajorDia) {
@@ -50,27 +64,32 @@ class EnglishThread extends Thread {
     var output = '<h1>$diaName - $thdsPerInch $series</h1>\n<table>';
     var table = [['Major Diameter:', '', '${majorDia.toStringAsFixed(4)} in',
                   '[${mmMajorDia.toStringAsFixed(3)} mm]']];
+    table.add(['Pitch Diameter:', '', '${pitchDiameter.toStringAsFixed(4)} in',
+               '[${(pitchDiameter * 25.4).toStringAsFixed(3)} mm]']);
+    table.add(['Int. Minor Diameter:', '',
+               '${intMinorDia.toStringAsFixed(4)} in',
+               '[${(intMinorDia * 25.4).toStringAsFixed(3)} mm]']);
+    table.add(['Ext. Minor Diameter:', '',
+               '${extMinorDia.toStringAsFixed(4)} in',
+               '[${(extMinorDia * 25.4).toStringAsFixed(3)} mm]']);
     if (tapName != null) {
       var tapDrillDia = drillRef.englishDrills.nameMatch(tapName).diameter;
-      var mmTapDrillDia = (tapDrillDia * 25400).round() / 1000;
       table.add(['Tap Drill:', tapName, '${tapDrillDia.toStringAsFixed(4)} in',
-                 '[${mmTapDrillDia.toStringAsFixed(3)} mm]']);
+                 '[${(tapDrillDia * 25.4).toStringAsFixed(3)} mm]']);
     }
     if (closeClear != null) {
       var closeClearDia = drillRef.englishDrills.nameMatch(closeClear).
                           diameter;
-      var mmCloseClearDia = (closeClearDia * 25400).round() / 1000;
       table.add(['Close Clearance Hole:', closeClear,
                  '${closeClearDia.toStringAsFixed(4)} in',
-                 '[${mmCloseClearDia.toStringAsFixed(3)} mm]']);
+                 '[${(closeClearDia * 25.4).toStringAsFixed(3)} mm]']);
     }
     if (freeClear != null) {
       var freeClearDia = drillRef.englishDrills.nameMatch(freeClear).
                           diameter;
-      var mmFreeClearDia = (freeClearDia * 25400).round() / 1000;
       table.add(['Free Clearance Hole:', freeClear,
                  '${freeClearDia.toStringAsFixed(4)} in',
-                 '[${mmFreeClearDia.toStringAsFixed(3)} mm]']);
+                 '[${(freeClearDia * 25.4).toStringAsFixed(3)} mm]']);
     }
     for (var row in table) {
       output += '\n<tr><td>${row.join('</td><td>')}</td></tr>';
@@ -94,6 +113,9 @@ class MetricThread extends Thread {
   double get inchMajorDia => (majorDia / 0.00254).round() / 10000;
 
   @override
+  double get extMinorDia => intMinorDia - threadHeight * 0.14434;
+
+  @override
   String toTable(double boldMajorDia) {
     var entries = ['M$majorDia x $pitch', isCommon ? 'common' : 'uncommon',
                    '[${inchMajorDia.toStringAsFixed(4)} in]'];
@@ -109,15 +131,19 @@ class MetricThread extends Thread {
     var output = '<h1>M$majorDia x $pitch ($commonText)</h1>\n<table>';
     var table = [['Major Diameter:', '${majorDia.toStringAsFixed(3)} mm',
                   '[${inchMajorDia.toStringAsFixed(4)} in]']];
+    table.add(['Pitch Diameter:', '${pitchDiameter.toStringAsFixed(3)} mm',
+               '[${(pitchDiameter / 25.4).toStringAsFixed(4)} in]']);
+    table.add(['Int. Minor Diameter:', '${intMinorDia.toStringAsFixed(3)} mm',
+               '[${(intMinorDia / 25.4).toStringAsFixed(4)} in]']);
+    table.add(['Ext. Minor Diameter:', '${extMinorDia.toStringAsFixed(3)} mm',
+               '[${(extMinorDia / 25.4).toStringAsFixed(4)} in]']);
     if (tapDia != null) {
-      var inchTapDia = (tapDia / 0.00254).round() / 10000;
       table.add(['Tap Drill:', '${tapDia.toStringAsFixed(3)} mm',
-                 '[${inchTapDia.toStringAsFixed(4)} in]']);
+                 '[${(tapDia / 25.4).toStringAsFixed(4)} in]']);
     }
     if (clearDia != null) {
-      var inchClearDia = (clearDia / 0.00254).round() / 10000;
       table.add(['Clearance Hole:', '${clearDia.toStringAsFixed(3)} mm',
-                 '[${inchClearDia.toStringAsFixed(4)} in]']);
+                 '[${(clearDia / 25.4).toStringAsFixed(4)} in]']);
     }
     for (var row in table) {
       output += '\n<tr><td>${row.join('</td><td>')}</td></tr>';

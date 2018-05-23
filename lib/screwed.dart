@@ -1,6 +1,8 @@
 import 'package:screwed/src/drill_list.dart';
 import 'package:screwed/src/thread_list.dart';
 
+var previousResults = '';
+
 var englishDrills = DrillData.load(false);
 var metricDrills = DrillData.load(true);
 var englishThreads = ThreadData.load(false);
@@ -44,6 +46,7 @@ String textSearch(String text) {
     } else {
       results += englishResults + metricResults;
     }
+    previousResults = results;
     return results;
   }
   return 'Nothing found';
@@ -56,5 +59,6 @@ String threadDetails(String name) {
   } else {
     details = englishThreads.nameMatch(name).details();
   }
+  details += '\n<p id="back_link">Return to list</p>';
   return details;
 }

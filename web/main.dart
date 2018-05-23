@@ -6,9 +6,10 @@ Element outputElem;
 
 void main() {
   outputElem = querySelector('#output');
-  outputElem.text = 'Loaded ${drillCount()} drills';
+  outputElem.text = 'Ready...';
   searchBox = querySelector('#search-box');
   searchBox.onKeyPress.listen(handleKeyPress);
+  searchBox.focus();
   window.onClick.listen(handleClick);
 }
 
@@ -23,11 +24,13 @@ void handleKeyPress(KeyboardEvent e) {
 }
 
 void handleClick(MouseEvent event) {
-  if (event.target is Element) {
+  if (event.target is Element && event.target != null) {
     Element target = event.target;
-    if ((target != null && target.className == 'clickable') ||
+    if (target.className == 'clickable' ||
         (target.parent != null && target.parent.className == 'clickable')) {
       outputElem.innerHtml = threadDetails(target.text);
+    } else if (target.id == 'back_link') {
+      outputElem.innerHtml = previousResults;
     }
   }
 }
