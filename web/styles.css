@@ -4,6 +4,17 @@ html, body {
   height: 100%;
 }
 
+.options {
+  padding: 1rem;
+  text-align: center;
+}
+
+.options label {
+  padding-left: 0.3rem;
+  padding-right: 1rem;
+  white-space: nowrap;
+}
+
 .search-entry {
   text-align: center;
 }

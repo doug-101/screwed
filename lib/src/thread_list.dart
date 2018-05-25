@@ -19,8 +19,8 @@ class ThreadData {
 
   bool get isNotEmpty => threads.isNotEmpty;
 
-  ThreadData approxMatch(double majorDia, bool commonOnly) {
-    if (commonOnly) {
+  ThreadData approxMatch(double majorDia, bool isCommonOnly) {
+    if (isCommonOnly) {
       var commonThreads = threads.where((thread) => thread.isCommon).toList();
       return ThreadData(commonThreads, isMetric).approxMatch(majorDia, false);
     }
