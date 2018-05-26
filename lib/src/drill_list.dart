@@ -14,7 +14,11 @@ class DrillData {
 
   bool get isNotEmpty => drills.isNotEmpty;
 
-  DrillData approxMatch(double inchDia, int deltaCount) {
+  DrillData approxMatch(double inchDia, int deltaCount, bool isCommonOnly) {
+    if (isCommonOnly) {
+      var commonDrills = drills.where((drill) => drill.isCommon).toList();
+      return DrillData(commonDrills).approxMatch(inchDia, deltaCount, false);
+    }
     var startPos = drills.indexWhere((drill) => inchDia <= drill.inchDia);
     var endPos = drills.lastIndexWhere((drill) => inchDia >= drill.inchDia);
     if (startPos < 0) {

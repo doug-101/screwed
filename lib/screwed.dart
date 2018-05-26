@@ -27,13 +27,14 @@ String textSearch(String text) {
     var inchDia = isMetric ? (diameter / 0.00254).round() / 10000 : diameter;
     DrillData matchedDrills;
     if (isEnglishOnly) {
-      matchedDrills = englishDrills.approxMatch(inchDia, 4);
+      matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
     } else if (isMetricOnly) {
-      matchedDrills = metricDrills.approxMatch(inchDia, 4);
+      matchedDrills = metricDrills.approxMatch(inchDia, 4, isCommonOnly);
     } else {
-      matchedDrills = englishDrills.approxMatch(inchDia, 4);
-      matchedDrills.combine(metricDrills.approxMatch(inchDia, 4));
-      matchedDrills = matchedDrills.approxMatch(inchDia, 4);
+      matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
+      matchedDrills.combine(metricDrills.approxMatch(inchDia, 4,
+                                                     isCommonOnly));
+      matchedDrills = matchedDrills.approxMatch(inchDia, 4, false);
     }
     results = '<h1>Drills</h1>\n';
     results += matchedDrills.toTable(isMetric, inchDia);

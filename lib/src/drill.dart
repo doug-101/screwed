@@ -1,11 +1,13 @@
 class Drill implements Comparable<Drill> {
   final String diaName;
   final double diameter;
+  final bool isCommon;
   final bool isMetric;
 
   Drill(Map<String, dynamic> data, this.isMetric)
       : diaName = data['name'],
-        diameter = data['diameter'];
+        diameter = data['diameter'],
+        isCommon = data['common'] ?? true;
 
   double get inchDia => isMetric ? (diameter / 0.00254).round() / 10000 :
                         diameter;
