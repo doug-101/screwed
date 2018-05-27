@@ -26,18 +26,25 @@ void main() {
     InputElement checkBox = event.target;
     if (checkBox.checked) englishBox.checked = false;
   });
+  querySelector('#search-button').onClick.listen((MouseEvent event) {
+    startSearch();
+  });
+}
+
+void startSearch() {
+  var searchText = searchBox.value.trim();
+  if (searchText.isNotEmpty) {
+    screwed.isEnglishOnly = englishBox.checked;
+    screwed.isMetricOnly = metricBox.checked;
+    screwed.isCommonOnly = !uncommonBox.checked;
+    previousResults = screwed.textSearch(searchText);
+    outputElem.innerHtml = previousResults;
+  }
 }
 
 void handleKeyPress(KeyboardEvent e) {
   if (e.which == 13) {  // Search on enter key.
-    var searchText = searchBox.value.trim();
-    if (searchText.isNotEmpty) {
-      screwed.isEnglishOnly = englishBox.checked;
-      screwed.isMetricOnly = metricBox.checked;
-      screwed.isCommonOnly = !uncommonBox.checked;
-      previousResults = screwed.textSearch(searchText);
-      outputElem.innerHtml = previousResults;
-    }
+    startSearch();
     e.preventDefault();
   }
 }
