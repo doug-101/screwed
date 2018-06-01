@@ -19,6 +19,8 @@ class ThreadData {
 
   bool get isNotEmpty => threads.isNotEmpty;
 
+  int get length => threads.length;
+
   ThreadData approxMatch(double majorDia, bool isCommonOnly) {
     if (isCommonOnly) {
       var commonThreads = threads.where((thread) => thread.isCommon).toList();
@@ -44,26 +46,79 @@ class ThreadData {
     return ThreadData(threads.sublist(startPos, endPos + 1), isMetric);
   }
 
+  ThreadData diaNameMatch(String name, bool isCommonOnly) {
+    if (isCommonOnly) {
+      var commonThreads = threads.where((thread) => thread.isCommon).toList();
+      return ThreadData(commonThreads, isMetric).diaNameMatch(name, false);
+    }
+    if (isMetric && name.startsWith('m')) {
+      name = name.substring(1);
+      var dia = double.tryParse(name);
+      if (dia != null) {
+        return ThreadData(threads.where((thread) {
+          return thread.majorDia == dia;
+        }).toList(), true);
+      }
+    } else if (!isMetric && name.startsWith('#')) {
+      return ThreadData(threads.where((thread) {
+        EnglishThread englishThread = thread;
+        return englishThread.diaName == name;
+      }).toList(), true);
+    }
+    return ThreadData([], isMetric);
+  }
+
   Thread nameMatch(String name) {
     if (isMetric) {
-      var data = name.substring(1).split('x');
-      var dia = double.parse(data[0].trim());
-      var pitch = double.parse(data[1].trim());
-      for (MetricThread thread in threads) {
-        if (thread.majorDia == dia && thread.pitch == pitch) {
-          return thread;
+      if (name.startsWith('m')) name = name.substring(1);
+      var data = name.split('x');
+      var dia = double.tryParse(data[0].trim());
+      var pitch = double.tryParse(data[1].trim());
+      if (dia != null && pitch != null) {
+        for (MetricThread thread in threads) {
+          if (thread.majorDia == dia && thread.pitch == pitch) {
+            return thread;
+          }
         }
       }
     } else {
-      var data = name.split(' - ');
+      var data = name.split('-');
+      if (data.length > 2) {
+        data[0] = '${data[0]}-${data[1]}';
+        data[1] = data[2];
+      }
       var diaName = data[0].trim();
-      var thdsPerInch = double.parse(data[1].trim());
+      if (int.tryParse(diaName) != null) diaName = '#' + diaName;
+      if (!diaName.startsWith('#') && !diaName.endsWith('in')) {
+        diaName = diaName + ' in';
+      }
+      var fractionData = diaName.split(RegExp(r'\s+'));
+      if (fractionData.length == 3) {
+        diaName = '${fractionData[0]}-${fractionData[1]} ${fractionData[2]}';
+      }
+      var thdsPerInch = double.tryParse(data[1].trim());
+      if (thdsPerInch == null) return null;
       for (EnglishThread thread in threads) {
         if (thread.diaName == diaName && thread.thdsPerInch == thdsPerInch) {
           return thread;
         }
       }
+      diaName = data[0].trim();
+      if (diaName.endsWith('in')) {
+        diaName = diaName.substring(0, diaName.length - 2).trim();
+      } else if (diaName.endsWith('"')) {
+        diaName = diaName.substring(0, diaName.length - 1).trim();
+      }
+      var dia = double.tryParse(diaName);
+      if (dia != null) {
+        for (EnglishThread thread in threads) {
+          if (thread.majorDia == dia && thread.thdsPerInch == thdsPerInch) {
+            return thread;
+          }
+        }
+      }
     }
+    return null;
   }
 
   String toTable(double boldMajorDia) {

@@ -10,6 +10,7 @@ var isMetricOnly = false;
 var isCommonOnly = true;
 
 String textSearch(String text) {
+  text = text.toLowerCase();
   var isMetric = isMetricOnly;
   if (text.endsWith('"')) {
     text = text.substring(0, text.length - 1).trim();
@@ -23,51 +24,107 @@ String textSearch(String text) {
   }
   var diameter = double.tryParse(text);
   if (diameter != null && diameter > 0) {
-    var results = '';
-    var inchDia = isMetric ? (diameter / 0.00254).round() / 10000 : diameter;
-    DrillData matchedDrills;
-    if (isEnglishOnly) {
-      matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
-    } else if (isMetricOnly) {
-      matchedDrills = metricDrills.approxMatch(inchDia, 4, isCommonOnly);
-    } else {
-      matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
-      matchedDrills.combine(metricDrills.approxMatch(inchDia, 4,
-                                                     isCommonOnly));
-      matchedDrills = matchedDrills.approxMatch(inchDia, 4, false);
+    return diameterSearch(diameter, isMetric);
+  }
+  var fractionRegExp = RegExp(r'(?:(\d+)\s*-?)?\s*(\d+)\s*/\s*(\d+)\s*$');
+  var fractionMatch = fractionRegExp.firstMatch(text);
+  if (fractionMatch != null) {
+    diameter = fractionMatch[1] != null ? double.parse(fractionMatch[1]) : 0;
+    diameter += double.parse(fractionMatch[2]) /
+                double.parse(fractionMatch[3]);
+    return diameterSearch(diameter, isMetric);
+  }
+  if (text.contains('-')) {
+    var englishThread = englishThreads.nameMatch(text);
+    if (englishThread != null) {
+      return englishThread.details();
     }
-    results = '<h1>Drills</h1>\n';
-    results += matchedDrills.toTable(isMetric, inchDia);
-
-    var englishResults = '';
-    ThreadData matchedThreads;
-    if (!isMetricOnly) {
-      matchedThreads = englishThreads.approxMatch(inchDia, isCommonOnly);
-      englishResults = '\n<h1>Unified Threads</h1>\n';
-      englishResults += matchedThreads.toTable(inchDia);
+  }
+  if (text.contains('x')) {
+    var metricThread = metricThreads.nameMatch(text);
+    if (metricThread != null) {
+      return metricThread.details();
     }
-
-    var metricResults = '';
-    if (!isEnglishOnly) {
-      var mmDia = isMetric ? diameter : (diameter * 2540).round() / 100;
-      matchedThreads = metricThreads.approxMatch(mmDia, isCommonOnly);
-      metricResults = '\n<h1>Metric Threads</h1>\n';
-      metricResults += matchedThreads.toTable(mmDia);
+  }
+  ThreadData matchedThreads;
+  if (text.startsWith('m')) {
+    matchedThreads = metricThreads.diaNameMatch(text, isCommonOnly);
+    if (matchedThreads.length == 1) {
+      return matchedThreads.threads[0].details();
+    } else if (matchedThreads.length > 1) {
+      return '\n<h1>Metric Threads</h1>\n' + matchedThreads.toTable(0.0);
     }
-
-    if (isMetric) {
-      results += metricResults + englishResults;
-    } else {
-      results += englishResults + metricResults;
+  }
+  var results = '';
+  if (text.startsWith('#')) {
+    var matchedDrill = englishDrills.nameMatch(text);
+    if (matchedDrill != null) {
+      results = '<h1>Drills</h1>\n';
+      results += DrillData([matchedDrill]).toTable(false, 0.0);
     }
-    return results;
+    matchedThreads = englishThreads.diaNameMatch(text, isCommonOnly);
+    if (matchedThreads.length > 0) {
+      results +=  '\n<h1>Unified Threads</h1>\n';
+      results += matchedThreads.toTable(0.0);
+    }
+    if (results.isNotEmpty) return results;
+  }
+  if (text.length == 1) {
+    var namedDrill = englishDrills.nameMatch(text.toUpperCase());
+    if (namedDrill != null) {
+      results = '<h1>Drills</h1>\n';
+      results += DrillData([namedDrill]).toTable(false, 0.0);
+      return results;
+    }
   }
   return 'Nothing found';
 }
 
+String diameterSearch(double diameter, bool isMetric) {
+  var results = '';
+  var inchDia = isMetric ? (diameter / 0.00254).round() / 10000 : diameter;
+  DrillData matchedDrills;
+  if (isEnglishOnly) {
+    matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
+  } else if (isMetricOnly) {
+    matchedDrills = metricDrills.approxMatch(inchDia, 4, isCommonOnly);
+  } else {
+    matchedDrills = englishDrills.approxMatch(inchDia, 4, false);
+    matchedDrills.combine(metricDrills.approxMatch(inchDia, 4,
+                                                   isCommonOnly));
+    matchedDrills = matchedDrills.approxMatch(inchDia, 4, false);
+  }
+  results = '<h1>Drills</h1>\n';
+  results += matchedDrills.toTable(isMetric, inchDia);
+
+  var englishResults = '';
+  ThreadData matchedThreads;
+  if (!isMetricOnly) {
+    matchedThreads = englishThreads.approxMatch(inchDia, isCommonOnly);
+    englishResults = '\n<h1>Unified Threads</h1>\n';
+    englishResults += matchedThreads.toTable(inchDia);
+  }
+
+  var metricResults = '';
+  if (!isEnglishOnly) {
+    var mmDia = isMetric ? diameter : (diameter * 2540).round() / 100;
+    matchedThreads = metricThreads.approxMatch(mmDia, isCommonOnly);
+    metricResults = '\n<h1>Metric Threads</h1>\n';
+    metricResults += matchedThreads.toTable(mmDia);
+  }
+
+  if (isMetric) {
+    results += metricResults + englishResults;
+  } else {
+    results += englishResults + metricResults;
+  }
+  return results;
+}
+
 String threadDetails(String name) {
+  name = name.toLowerCase();
   String details;
-  if (name.startsWith('M')) {
+  if (name.startsWith('m')) {
     details = metricThreads.nameMatch(name).details();
   } else {
     details = englishThreads.nameMatch(name).details();

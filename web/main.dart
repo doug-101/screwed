@@ -21,13 +21,19 @@ void main() {
   englishBox.onClick.listen((MouseEvent event) {
     InputElement checkBox = event.target;
     if (checkBox.checked) metricBox.checked = false;
+    searchBox.focus();
   });
   metricBox.onClick.listen((MouseEvent event) {
     InputElement checkBox = event.target;
     if (checkBox.checked) englishBox.checked = false;
+    searchBox.focus();
+  });
+  uncommonBox.onClick.listen((MouseEvent event) {
+    searchBox.focus();
   });
   querySelector('#search-button').onClick.listen((MouseEvent event) {
     startSearch();
+    searchBox.focus();
   });
 }
 
