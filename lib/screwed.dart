@@ -132,3 +132,23 @@ String threadDetails(String name) {
   details += '\n<p id="back_link">Return to list</p>';
   return details;
 }
+
+String helpText() {
+  var text = '<br>'
+             'Enter a number into the search box to list drills and<br>'
+             'threads with close to that diameter.  The number can be<br>'
+             'followed by a unit ("in" or a double quote for inches,<br>'
+             '"mm" for millimeters).  If no unit is entered, it defaults<br>'
+             'to inches (unless the "Metric Only" box is checked).<br>'
+             'Fractional diameters can also be entered.<br><br>'
+             'Search entries can also be more specific.  Enter "#6" to<br>'
+             'find a numbered drill or thread size.  Or "B" to find<br>'
+             'a lettered drill size.  Or enter ".25-20" or "4x0.7"<br>'
+             'to show a particular thread size.<br><br>'
+             'The blue names in the thread list can be clicked for more<br>'
+             'details for that thread size.  Note that all of the thread<br>'
+             'dimensions given are nominals.<br><br>'
+             'The "Include Uncommon Sizes" box can be checked to<br>'
+             'show less common drill and thread sizes.';
+  return text;
+}

@@ -2,6 +2,23 @@
 html, body {
   width: 100%;
   height: 100%;
+  color: LightGray;
+  background-color: #222222;
+}
+
+input {
+  background-color: LightGray;
+  font-weight: bold;
+}
+
+.header {
+  text-align: center;
+  font-size: 4em;
+  font-style: italic;
+  font-weight: bold;
+  text-shadow: 0.1em 0.1em black;
+  margin-top: 0.3rem;
+  margin-bottom: 0px;
 }
 
 .options {
@@ -19,8 +36,15 @@ html, body {
   text-align: center;
 }
 
+.search-entry input {
+  width: 8rem;
+}
+
+.search-entry button {
+  border-radius: 0.3rem;
+}
+
 #output {
-  padding: 2rem;
   text-align: center;
 }
 
@@ -36,11 +60,18 @@ td {
 
 .clickable {
   cursor: pointer;
-  color: Navy;
+  color: LightSkyBlue;
 }
 
 #back_link {
   cursor: pointer;
-  color: Navy;
+  color: LightSkyBlue;
   padding: 2rem;
+}
+
+#help_link {
+  cursor: pointer;
+  color: LightSkyBlue;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }

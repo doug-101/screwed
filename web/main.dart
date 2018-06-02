@@ -38,6 +38,7 @@ void main() {
 }
 
 void startSearch() {
+  querySelector('#help_link').hidden = false;
   var searchText = searchBox.value.trim();
   if (searchText.isNotEmpty) {
     screwed.isEnglishOnly = englishBox.checked;
@@ -63,6 +64,9 @@ void handleClick(MouseEvent event) {
       outputElem.innerHtml = screwed.threadDetails(target.text);
     } else if (target.id == 'back_link') {
       outputElem.innerHtml = previousResults;
+    } else if (target.id == 'help_link') {
+      querySelector('#help_link').hidden = true;
+      outputElem.innerHtml = screwed.helpText();
     }
   }
 }
