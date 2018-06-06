@@ -1,6 +1,15 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
 import 'dart:math';
 import 'package:screwed/screwed.dart' as drillRef;
 
+/// Base class for English and metric threads.
 abstract class Thread {
   final double majorDia;
   double pitch, extMinorDia;
@@ -26,6 +35,7 @@ abstract class Thread {
 }
 
 
+/// Store data for an inch-based thread.
 class EnglishThread extends Thread {
   final String diaName, series, tapName, closeClear, freeClear;
   final num thdsPerInch;
@@ -48,6 +58,7 @@ class EnglishThread extends Thread {
   @override
   double get extMinorDia => intMinorDia - threadHeight / 8;
 
+  /// Return an HTML table with the thread name.
   @override
   String toTable(double boldMajorDia) {
     var entries = ['$diaName - $thdsPerInch', series,
@@ -59,6 +70,7 @@ class EnglishThread extends Thread {
     return '<td class="clickable">${entries.join('</td><td>')}</td>';
   }
 
+  /// Return an HTML table of thread paramters.
   @override
   String details() {
     var output = '<h1>$diaName - $thdsPerInch $series</h1>\n<table>';
@@ -100,6 +112,7 @@ class EnglishThread extends Thread {
 }
 
 
+/// Store data for a millimeter-based thread.
 class MetricThread extends Thread {
   final double pitch, tapDia, clearDia;
 
@@ -115,6 +128,7 @@ class MetricThread extends Thread {
   @override
   double get extMinorDia => intMinorDia - threadHeight * 0.14434;
 
+  /// Return an HTML table with the thread name.
   @override
   String toTable(double boldMajorDia) {
     var entries = ['M$majorDia x $pitch', isCommon ? 'common' : 'uncommon',
@@ -125,6 +139,7 @@ class MetricThread extends Thread {
     return '<td class="clickable">${entries.join('</td><td>')}</td>';
   }
 
+  /// Return an HTML table of thread paramters.
   @override
   String details() {
     var commonText = isCommon ? 'common' : 'uncommon';

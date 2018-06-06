@@ -1,3 +1,12 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
+/// Store data for a particular drill size.
 class Drill implements Comparable<Drill> {
   final String diaName;
   final double diameter;
@@ -14,6 +23,7 @@ class Drill implements Comparable<Drill> {
 
   double get mmDia => isMetric ? diameter : (diameter * 25400).round() / 1000;
 
+  /// Return the text name including a unit conversion.
   String toString() {
     if (isMetric) {
       return '$diaName [${inchDia.toStringAsFixed(3)} in]';
@@ -23,6 +33,7 @@ class Drill implements Comparable<Drill> {
     }
   }
 
+  /// Return an HTML table of drill data.
   String toTable(bool metricFirst, double boldInchDia) {
     var entries = [diaName];
     if (metricFirst) {

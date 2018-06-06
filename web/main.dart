@@ -1,3 +1,11 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
 import 'dart:html';
 import 'package:screwed/screwed.dart' as screwed;
 
@@ -37,6 +45,7 @@ void main() {
   });
 }
 
+/// Search for the contents of the search text box.
 void startSearch() {
   querySelector('#help_link').hidden = false;
   var searchText = searchBox.value.trim();
@@ -49,13 +58,15 @@ void startSearch() {
   }
 }
 
+/// Start a search when Enter key is pressed.
 void handleKeyPress(KeyboardEvent e) {
-  if (e.which == 13) {  // Search on enter key.
+  if (e.which == 13) {
     startSearch();
     e.preventDefault();
   }
 }
 
+/// Handle clicks on thread detail links and other links.
 void handleClick(MouseEvent event) {
   if (event.target is Element && event.target != null) {
     Element target = event.target;

@@ -1,3 +1,12 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
+/// Data for inch-based drill sizes.
 var data = [
   {"name": "#107", "diameter": 0.0019},
   {"name": "#106", "diameter": 0.0023},

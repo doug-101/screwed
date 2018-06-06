@@ -1,7 +1,16 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
 import 'package:screwed/src/thread.dart';
 import 'package:screwed/data/threads_english.dart' as english_data;
 import 'package:screwed/data/threads_metric.dart' as metric_data;
 
+///  Store a searchable list of thread data.
 class ThreadData {
   List<Thread> threads;
   bool isMetric;
@@ -21,6 +30,7 @@ class ThreadData {
 
   int get length => threads.length;
 
+  /// Return a [ThreadData] instance with sizes near the searched diameter.
   ThreadData approxMatch(double majorDia, bool isCommonOnly) {
     if (isCommonOnly) {
       var commonThreads = threads.where((thread) => thread.isCommon).toList();
@@ -46,6 +56,7 @@ class ThreadData {
     return ThreadData(threads.sublist(startPos, endPos + 1), isMetric);
   }
 
+  /// Return a [ThreadData] instance with matching diameters.
   ThreadData diaNameMatch(String name, bool isCommonOnly) {
     if (isCommonOnly) {
       var commonThreads = threads.where((thread) => thread.isCommon).toList();
@@ -68,6 +79,7 @@ class ThreadData {
     return ThreadData([], isMetric);
   }
 
+  /// Return a [Thread] that matches the full name.
   Thread nameMatch(String name) {
     if (isMetric) {
       if (name.startsWith('m')) name = name.substring(1);
@@ -121,6 +133,7 @@ class ThreadData {
     return null;
   }
 
+  /// Return an HTML table of all thread data.
   String toTable(double boldMajorDia) {
     var entries = threads.map((thread) => thread.toTable(boldMajorDia));
     return '<table><tr>${entries.join('</tr>\n<tr>')}</tr></table>';

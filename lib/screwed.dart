@@ -1,3 +1,11 @@
+// Screwed, a web app for finding drill and thread data.
+// Copyright (C) 2018, Douglas W. Bell
+//
+// This is free software; you can redistribute it and/or modify it under the
+// terms of the GNU General Public License, either Version 2 or any later
+// version.  This program is distributed in the hope that it will be useful,
+// but WITTHOUT ANY WARRANTY.  See the included LICENSE file for details.
+
 import 'package:screwed/src/drill_list.dart';
 import 'package:screwed/src/thread_list.dart';
 
@@ -9,6 +17,7 @@ var isEnglishOnly = false;
 var isMetricOnly = false;
 var isCommonOnly = true;
 
+/// Return the output text results for various searches.
 String textSearch(String text) {
   text = text.toLowerCase();
   var isMetric = isMetricOnly;
@@ -80,6 +89,7 @@ String textSearch(String text) {
   return 'Nothing found';
 }
 
+/// Return the output text results of a search for a drill or thread diameter.
 String diameterSearch(double diameter, bool isMetric) {
   var results = '';
   var inchDia = isMetric ? (diameter / 0.00254).round() / 10000 : diameter;
@@ -121,6 +131,7 @@ String diameterSearch(double diameter, bool isMetric) {
   return results;
 }
 
+/// Return thread detail text output based on a thread name.
 String threadDetails(String name) {
   name = name.toLowerCase();
   String details;
@@ -133,6 +144,7 @@ String threadDetails(String name) {
   return details;
 }
 
+/// Return HTML text for elp output.
 String helpText() {
   var text = '<br>'
              'Enter a number into the search box to list drills and<br>'
