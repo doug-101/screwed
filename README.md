@@ -6,7 +6,7 @@ Written initially to learn the Dart programming language, but it is useful.
 
 # Run It
 
-You can run this from [screwed.bellz.org]((http://screwed.bellz.org/).
+You can run this from [screwed.bellz.org](http://screwed.bellz.org/).
 
 # License
 
