@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<!-- Screwed, a web app for finding drill and thread data.
+     Copyright (C) 2018, Douglas W. Bell  -->
+
+<!-- This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU Affero General Public License, either
+     version 3 of the License, or any later version.  This program is
+     distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
+     See <http://www.gnu.org/licenses/> for details.  -->
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>screwed</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.png">
+    <script defer src="main.dart.js"></script>
+</head>
+
+<body>
+
+    <p class="header">Screwed</p>
+    <form id="main-form" action="" autocomplete="off">
+        <div class="options">
+            <label>
+                <input type="checkbox" id="english-only">
+                English Only
+            </label>
+            <label>
+                <input type="checkbox" id="metric-only">
+                Metric Only
+            </label>
+            <label>
+                <input type="checkbox" id="add-uncommon">
+                Include Uncommon Sizes
+            </label>
+        </div>
+        <div class="search-entry">
+            <input type="text" id="search-box" tabindex="1"
+            spellcheck="false" autocomplete="off" />
+            <button type="button" id="search-button" tabindex="-1">Search
+            </button>
+            <div id="help_link">(click here for help)</div>
+        </div>
+    </form>
+
+    <div id="output"></div>
+
+</body>
+</html>

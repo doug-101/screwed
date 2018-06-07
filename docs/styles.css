@@ -1,0 +1,86 @@
+/* Screwed, a web app for finding drill and thread data.
+ * Copyright (C) 2018, Douglas W. Bell  */
+
+/*  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License, either
+ *  version 3 of the License, or any later version.  This program is
+ *  distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
+ *  See <http://www.gnu.org/licenses/> for details.  */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  color: LightGray;
+  background-color: #222222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+input {
+  background-color: LightGray;
+  font-weight: bold;
+}
+
+.header {
+  text-align: center;
+  font-size: 4em;
+  font-style: italic;
+  font-weight: bold;
+  text-shadow: 0.1em 0.1em black;
+  margin-top: 0.3rem;
+  margin-bottom: 0px;
+}
+
+.options {
+  padding: 1rem;
+  text-align: center;
+}
+
+.options label {
+  padding-left: 0.3rem;
+  padding-right: 1rem;
+  white-space: nowrap;
+}
+
+.search-entry {
+  text-align: center;
+}
+
+.search-entry input {
+  width: 8rem;
+}
+
+.search-entry button {
+  border-radius: 0.3rem;
+}
+
+#output {
+  text-align: center;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  padding: 0.3rem 0.7rem;
+  text-align: right;
+}
+
+.clickable {
+  cursor: pointer;
+  color: LightSkyBlue;
+}
+
+#back_link {
+  cursor: pointer;
+  color: LightSkyBlue;
+  padding: 2rem;
+}
+
+#help_link {
+  cursor: pointer;
+  color: LightSkyBlue;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
