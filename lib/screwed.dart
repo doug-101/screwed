@@ -144,7 +144,7 @@ String threadDetails(String name) {
   return details;
 }
 
-/// Return HTML text for elp output.
+/// Return HTML text for help output.
 String helpText() {
   var text = '<br>'
              'Enter a number into the search box to list drills and<br>'
@@ -161,6 +161,8 @@ String helpText() {
              'details for that thread size.  Note that all of the thread<br>'
              'dimensions given are nominals.<br><br>'
              'The "Include Uncommon Sizes" box can be checked to<br>'
-             'show less common drill and thread sizes.';
+             'show less common drill and thread sizes.<br><br>'
+             'See <a href="https://github.com/doug-101/screwed">GitHub</a> '
+             'for source code and more information';
   return text;
 }

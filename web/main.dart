@@ -77,7 +77,8 @@ void handleClick(MouseEvent event) {
       outputElem.innerHtml = previousResults;
     } else if (target.id == 'help_link') {
       querySelector('#help_link').hidden = true;
-      outputElem.innerHtml = screwed.helpText();
+      outputElem.setInnerHtml(screwed.helpText(),
+                              treeSanitizer: NodeTreeSanitizer.trusted);
     }
   }
 }
